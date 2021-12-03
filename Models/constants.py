@@ -2,7 +2,7 @@ try:
     import numpy
     import cv2 as cv
 except Exception:
-    raise ImportError
+    print("Something went wrong with the package dependencies.")
 
 
 BLACK = (0, 0, 0)

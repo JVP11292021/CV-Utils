@@ -1,6 +1,6 @@
 import os
 import time
-import Models.constants as constant
+from Models.constants import WHITE, BLACK
 
 try:
     import numpy
@@ -9,8 +9,7 @@ try:
     import mediapipe as mp
     from PIL import ImageFont, ImageDraw, Image
 except Exception:
-    print("Something went wrong with the required packages.")
-    raise ImportError
+    print("Something went wrong with the package dependencies.")
 
 
 class FaceRecognition:
@@ -80,7 +79,7 @@ class FaceRecognition:
 
         return encode_list
 
-    def find_faces(self, frame, face_encodings, face_locations, encode_known_faces, color=constant.WHITE, draw=True):
+    def find_faces(self, frame, face_encodings, face_locations, encode_known_faces, color=WHITE, draw=True):
         r"""
         This function finds the faces in the frames that are being displayed.
 
@@ -170,7 +169,7 @@ class FaceDetection:
 
         self.face_location = ()
 
-    def detect_faces(self, frame, face_locations, face_encodings, color=constant.WHITE, draw=True):
+    def detect_faces(self, frame, face_locations, face_encodings, color=WHITE, draw=True):
         r"""
         This function detects the faces that are being displayed in the frames.
 
@@ -318,7 +317,7 @@ class RecButton:
     This class is used to draw a button on the video loop of opencv. This class was created to make the drawing
     of buttons easier and more accessible to newer developers. This button creates a rectangular button.
     """
-    def __init__(self, text, pos1, pos2, text_pos, fg=constant.WHITE, bg=constant.BLACK, text_thickness=1):
+    def __init__(self, text, pos1, pos2, text_pos, fg=WHITE, bg=BLACK, text_thickness=1):
         r"""
         In the constructor the values that are passed in are initialized.
 
@@ -365,7 +364,7 @@ class RecButton:
 
         return frame
 
-    def highlight(self, frame, bg_highlight, fg_highlight=constant.WHITE):
+    def highlight(self, frame, bg_highlight, fg_highlight=WHITE):
         r"""
         Highlights the rectangle by drawing a new one on top of it with other colors. The other rectangle
         will be deleted
@@ -391,7 +390,7 @@ class CirButton:
     This class is used to draw a button on the video loop of opencv. This class was created to make the drawing
     of buttons easier and more accessible to newer developers. This button creates a circular button.
     """
-    def __init__(self, text, text_pos, center_pos, r, thickness, bg=constant.BLACK, fg=constant.WHITE):
+    def __init__(self, text, text_pos, center_pos, r, thickness, bg=BLACK, fg=WHITE):
         r"""
         In the constructor the values are being initialized.
 
@@ -435,7 +434,7 @@ class CirButton:
 
         return frame
 
-    def highlight(self, frame, bg_highlight, fg_highlight=constant.WHITE):
+    def highlight(self, frame, bg_highlight, fg_highlight=WHITE):
         r"""
         Highlights the rectangle by drawing a new one on top of it with other colors. The other rectangle
         will be deleted
@@ -474,7 +473,7 @@ class FPS:
         self.c_time = 0
         self.fps = 0
 
-    def draw_fps(self, frame, pos: tuple, font, draw=True, font_scale=3, color=constant.BLACK, thickness=2):
+    def draw_fps(self, frame, pos: tuple, font, draw=True, font_scale=3, color=BLACK, thickness=2):
         r"""
         This function handles the frames per second (fps) of the model. The fps indicates how many times the frame
         is being played per second.
@@ -569,7 +568,7 @@ def set_capture_size(w, h, capture):
     capture.set(4, h)
 
 
-def draw_custom_text(frame, font_ttf, text, pos, font_size=32, color=(constant.WHITE, 0)):
+def draw_custom_text(frame, font_ttf, text, pos, font_size=32, color=(WHITE, 0)):
     r"""
     This function can be used to draw text on the opencv frame with a custom font.
 

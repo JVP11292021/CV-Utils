@@ -7,7 +7,7 @@ AUTHOR = "Jessy van Polanen"
 AUTHOR_EMAIL = "jessyvanpolanen@gmail.com"
 KEYWORDS = ["cv-utils", "opencv", "computer vision", "utils", "python"]
 LICENSE = "MIT"
-URL = ""
+URL = "https://github.com/JVP11292021/CV-Utils.git"
 
 
 def read_me():
