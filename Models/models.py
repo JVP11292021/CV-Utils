@@ -9,7 +9,7 @@ try:
     import mediapipe as mp
     from PIL import ImageFont, ImageDraw, Image
 except Exception:
-    print("Something went wrong with the package dependencies.")
+    print("Something went wrong with the package dependencies. ")
 
 
 class FaceRecognition:
