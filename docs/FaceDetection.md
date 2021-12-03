@@ -1,4 +1,4 @@
-#**Face detection**
+# **Face detection**
 
 In this file i'll explain how you can use the face detection module in your own computer vision projects.
 
@@ -120,7 +120,7 @@ After you've added all these steps the model should be working. Now we can add s
     cv.destroyAllWindows()
 `
 
-###**Complete program**
+### **Complete program**
 
 Note make sure to add cv.imshow() last.
 

@@ -1,4 +1,4 @@
-#**Hand tracker**
+# **Hand tracker**
 
 In this file i'll explain how you can use the hand tracker module in your own computer vision projects.
 
