@@ -35,11 +35,13 @@ Unreleased
     - Added color selection system to the ``draw_background`` function.
     - Changed parameters from ``draw_background``.
     - Added ``ALL_CONTOURS`` constant.
+    - Added finger constants for `HandTracker`.
+    _ Made some parameter changes to `RecButton` class.
 
 - Additions utility functions/classes.
     - Added ``LiveColorDetector`` class.
     - Added ``img_stacker`` function.
-    - Added ``get_contour`` function
+    - Added ``get_contour`` function.
 
 
 
