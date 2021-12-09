@@ -316,7 +316,7 @@ class RecButton:
     This class is used to draw a button on the video loop of opencv. This class was created to make the drawing
     of buttons easier and more accessible to newer developers. This button creates a rectangular button.
     """
-    def __init__(self, text, pos1, pos2, text_pos, fg=(255, 255, 255), bg=(0, 0, 0), text_thickness=1):
+    def __init__(self, text, pos1, pos2, fg=(255, 255, 255), bg=(0, 0, 0), text_thickness=1):
         r"""
         In the constructor the values that are passed in are initialized.
 
@@ -332,12 +332,11 @@ class RecButton:
         self.text = text
         self.pos1 = pos1
         self.pos2 = pos2
-        self.text_pos = text_pos
         self.text_thickness = text_thickness
         self.fg = fg
         self.bg = bg
 
-    def draw(self, frame):
+    def draw(self, frame, c_x=0, c_y=0):
         r"""
         This function is used to draw the button on the frame. The button is rectangular if the values are
         passed in correctly.
@@ -351,19 +350,20 @@ class RecButton:
         --------x2,y2 pos2
 
         :param frame: Takes in the frame on which you want to draw the button
+        :param c_x: Shift the text on the x-axis
+        :param c_y: Shift the text on the y-axis
         :return: The frame with the button drawn on it
         """
 
         x1, y1 = self.pos1
         x2, y2 = self.pos2
-        text_x, text_y = self.text_pos
 
         cv2.rectangle(frame, (x1, y1), (x2, y2), self.bg, cv2.FILLED)
-        cv2.putText(frame, self.text, (text_x, text_y), cv2.FONT_HERSHEY_PLAIN, 2, self.fg, self.text_thickness)
+        cv2.putText(frame, self.text, (x1 + (x2 // 2) + c_x, y1 + (y2 // 2) + c_y), cv2.FONT_HERSHEY_PLAIN, 2, self.fg, self.text_thickness)
 
         return frame
 
-    def highlight(self, frame, bg_highlight, fg_highlight=(255, 255, 255)):
+    def highlight(self, frame, bg_highlight, fg_highlight=(255, 255, 255), c_x=0, c_y=0):
         r"""
         Highlights the rectangle by drawing a new one on top of it with other colors. The other rectangle
         will be deleted
@@ -371,15 +371,16 @@ class RecButton:
         :param frame: Takes in the frame on which you want to draw the button
         :param bg_highlight: The new background color
         :param fg_highlight: The new foreground color
+        :param c_x: Shift the text on the x-axis
+        :param c_y: Shift the text on the y-axis
         :return: frame on which the new rectangle will be drawn on
         """
 
         x1, y1 = self.pos1
         x2, y2 = self.pos2
-        text_x, text_y = self.text_pos
 
         cv2.rectangle(frame, (x1, y1), (x2, y2), bg_highlight, cv2.FILLED)
-        cv2.putText(frame, self.text, (text_x, text_y), cv2.FONT_HERSHEY_PLAIN, 2, fg_highlight, self.text_thickness)
+        cv2.putText(frame, self.text, (x1 + (x2 // 2) + c_x, y1 + (y2 // 2) + c_y), cv2.FONT_HERSHEY_PLAIN, 2, fg_highlight, self.text_thickness)
 
         return frame
 
@@ -615,8 +616,6 @@ class LiveColorDetector:
         pass
 
 
-
-
 class FPS:
     def __init__(self):
         r"""
@@ -843,8 +842,8 @@ def get_contours(img_canny, img, draw_contours, draw=True, color=(0, 0, 0), thic
             approx = cv2.approxPolyDP(cnt, 0.02 * peri, True)
             obj_cor = len(approx)
             object_corners.append(obj_cor)
-            x, y, w, h = cv2.boundingRect(approx)
             if draw:
+                x, y, w, h = cv2.boundingRect(approx)
                 cv2.rectangle(img, (x, y), (x + w, y + h), (67, 255, 87), 1)
 
     return object_corners, img
