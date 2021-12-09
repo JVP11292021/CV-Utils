@@ -8,7 +8,7 @@ Released
 -   Support for Python 3.8.
 -   Support for Python 3.9.
 
-- Code utility functions/classes
+- Additions utility functions/classes
     -   Added ``FaceRecognition`` class
     -   Added ``FaceDetection`` class
     -   Added ``HandTracker`` class
@@ -24,7 +24,22 @@ Released
     -   Added ``for_each_img`` function
     -   Added ``file_splitter`` function
 
+Version 0.0.2
+-------------
 
+Unreleased
+
+- Hotfixes
+    - Removed ``WEBCAM_CAP`` from constants.py.
+    - Removed unnecessary import from models.py.
+    - Added color selection system to the ``draw_background`` function.
+    - Changed parameters from ``draw_background``.
+    - Added ``ALL_CONTOURS`` constant.
+
+- Additions utility functions/classes.
+    - Added ``LiveColorDetector`` class.
+    - Added ``img_stacker`` function.
+    - Added ``get_contour`` function
 
 
 
