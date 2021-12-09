@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 NAME = "cv-utils"
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 DESCRIPTION = "Package to help developers with their opencv-python adventures."
 AUTHOR = "Jessy van Polanen"
 AUTHOR_EMAIL = "jessyvanpolanen@gmail.com"
