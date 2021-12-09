@@ -1,16 +1,12 @@
 import unittest
 import Models
-from Models.constants import BLANK_FRAME, WEBCAM_CAP
+from Models.constants import BLANK_FRAME
 import cv2 as cv
 
 
 class TestFunc(unittest.TestCase):
     def test_close_win(self):
         self.assertEqual(Models.close_win('q'), False)
-
-    def test_set_capture_size(self):
-        self.assertEqual(Models.set_capture_size(1200, 800, WEBCAM_CAP), None)
-
 
 class TestFPS(unittest.TestCase):
     fps = Models.FPS()
