@@ -453,6 +453,170 @@ class CirButton:
         return frame
 
 
+class LiveColorDetector:
+    def __init__(self, name_tb, win_w, win_h, hue_min=(81, 179), hue_max=(179, 179), sat_min=(0, 255), sat_max=(255, 255), val_min=(0, 255), val_max=(105, 255)):
+        r"""
+        In the constructor the values are initialized. The trackbar window to control the image mask is also
+        created.
+
+        :param name_tb: The slider name
+        :param win_w: The width of the window
+        :param win_h: The height of the window
+        :param hue_min: The initial starting value of the slider
+        :param hue_max: The initial starting value of the slider
+        :param sat_min: The initial starting value of the slider
+        :param sat_max: The initial starting value of the slider
+        :param val_min: The initial starting value of the slider
+        :param val_max: The initial starting value of the slider
+        """
+
+        self.name_tb = name_tb
+        self.win_w = win_w
+        self.win_h = win_h
+        self.hue_min = hue_min
+        self.hue_max = hue_max
+        self.sat_min = sat_min
+        self.sat_max = sat_max
+        self.val_min = val_min
+        self.val_max = val_max
+
+        cv2.namedWindow(self.name_tb)
+        cv2.resizeWindow(self.name_tb, 640, 240)
+        cv2.createTrackbar("Hue min", self.name_tb, self.hue_min[0], self.hue_min[1], self.__empty)
+        cv2.createTrackbar("Hue max", self.name_tb, self.hue_max[0], self.hue_max[1], self.__empty)
+        cv2.createTrackbar("Sat min", self.name_tb, self.sat_min[0], self.sat_min[1], self.__empty)
+        cv2.createTrackbar("Sat max", self.name_tb, self.sat_max[0], self.sat_max[1], self.__empty)
+        cv2.createTrackbar("Val min", self.name_tb, self.val_min[0], self.val_min[1], self.__empty)
+        cv2.createTrackbar("Val max", self.name_tb, self.val_max[0], self.val_max[1], self.__empty)
+
+    def __del__(self):
+        r"""
+        The destructor is used for garbage collection. To destroy the memory of the object, and reset the
+        values of the variables.
+
+        :return:
+        """
+
+        self.name_tb = None
+        self.win_w = None
+        self.win_h = None
+        self.hue_min = None
+        self.hue_max = None
+        self.sat_min = None
+        self.sat_max = None
+        self.val_min = None
+        self.val_max = None
+
+    def detect(self, img_path, title="Live color detector", show_img=True, img_scale=1):
+        r"""
+        This function is used for controlling the HSV values live via an mask.
+
+        :param img_path: The path to the image you want to show
+        :param title: The title of the window
+        :param show_img: If you want to show the standard window
+        :param img_scale: The scale of the displayed image
+
+        :return: returns the full stacked img
+
+        """
+
+        img = cv2.imread(img_path)
+
+        img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+        self.h_min = cv2.getTrackbarPos("Hue min", self.name_tb)
+        self.h_max = cv2.getTrackbarPos("Hue max", self.name_tb)
+        self.s_min = cv2.getTrackbarPos("Sat min", self.name_tb)
+        self.s_max = cv2.getTrackbarPos("Sat max", self.name_tb)
+        self.v_min = cv2.getTrackbarPos("Val min", self.name_tb)
+        self.v_max = cv2.getTrackbarPos("Val max", self.name_tb)
+
+        lower = numpy.array([self.h_min, self.s_min, self.v_min])
+        upper = numpy.array([self.h_max, self.s_max, self.v_max])
+
+        mask = cv2.inRange(img_hsv, lower, upper)
+
+        self.img_result = cv2.bitwise_and(img, img, mask=mask)
+
+        full_img = img_stacker(img_scale, ([img, img_hsv], [mask, self.img_result]))
+
+        if show_img:
+            cv2.imshow(title, full_img)
+
+        return full_img
+
+    def save_result(self, save_path):
+        r"""
+        This function save the result of the img.
+
+        :param save_path: The path where you want the image to be saved
+        """
+        cv2.imwrite(save_path, self.img_result)
+
+    def get_hue_min(self):
+        r"""
+        This function gets the current trackbar value from the Hue min.
+
+        :return: h_min
+        """
+
+        return self.h_min
+
+    def get_hue_max(self):
+        r"""
+        This function gets the current trackbar value from the Hue max.
+
+        :return: h_max
+        """
+
+        return self.h_max
+
+    def get_sat_min(self):
+        r"""
+        This function gets the current trackbar value from the Sat min.
+
+        :return: s_min
+        """
+
+        return self.sat_min
+
+    def get_sat_max(self):
+        r"""
+        This function gets the current trackbar value from the Sat max.
+
+        :return: s_max
+        """
+
+        return self.sat_max
+
+    def get_val_min(self):
+        r"""
+        This function gets the current trackbar value from the Val min.
+
+        :return: v_min
+        """
+
+        return self.val_min
+
+    def get_val_max(self):
+        r"""
+        This function gets the current trackbar value from the Val max.
+
+        :return: v_max
+        """
+
+        return self.v_max
+
+    @staticmethod
+    def __empty(x):
+        r"""
+        This function is empty.
+        """
+        pass
+
+
+
+
 class FPS:
     def __init__(self):
         r"""
@@ -485,7 +649,6 @@ class FPS:
         :param font_scale: the scale of the font
         :param color: input is a tuple with rgb values
         :param thickness: the thickness of the font
-        :param p_time:
         :return: the fps
         """
 
@@ -505,20 +668,19 @@ class FPS:
         return int(self.fps)
 
 
-def draw_background(frame_shape, white=True):
+def draw_background(frame_shape, color=(255, 255, 255)):
     r"""
     This function can draw a background on a opencv window frame. The background can only be black or white.
 
     :param frame_shape: Takes in the shape of the frame as parameter, so the fw, fh, c
-    :param white: This boolean value is == to true if you want black background set this parameter to false
+    :param color: The color of the background
     :return: The new and updated frame
     """
 
     w, h, c = frame_shape
 
     frame = numpy.zeros((w, h, c), numpy.uint8)
-    if white:
-        frame.fill(255)
+    frame[:] = color
 
     return frame
 
@@ -623,3 +785,66 @@ def file_splitter(dir_path: str):
 
         yield new_image_name
 
+
+def img_stacker(scale, img_array):
+    r"""
+    This function is able to stack images vertically or horizontally.
+
+    :param scale:
+    :param img_array:
+    :return: The stacked images
+    """
+    rows = len(img_array)
+    cols = len(img_array[0])
+    rowsAvailable = isinstance(img_array[0], list)
+    width = img_array[0][0].shape[1]
+    height = img_array[0][0].shape[0]
+    if rowsAvailable:
+        for x in range(0, rows):
+            for y in range(0, cols):
+                if img_array[x][y].shape[:2] == img_array[0][0].shape[:2]:
+                    img_array[x][y] = cv2.resize(img_array[x][y], (0, 0), None, scale, scale)
+                else:
+                    img_array[x][y] = cv2.resize(img_array[x][y], (img_array[0][0].shape[1], img_array[0][0].shape[0]),
+                                                 None, scale, scale)
+                if len(img_array[x][y].shape) == 2:
+                    img_array[x][y] = cv2.cvtColor(img_array[x][y], cv2.COLOR_GRAY2BGR)
+        imageBlank = numpy.zeros((height, width, 3), numpy.uint8)
+        hor = [imageBlank] * rows
+        hor_con = [imageBlank] * rows
+        for x in range(0, rows):
+            hor[x] = numpy.hstack(img_array[x])
+        ver = numpy.vstack(hor)
+    else:
+        for x in range(0, rows):
+            if img_array[x].shape[:2] == img_array[0].shape[:2]:
+                img_array[x] = cv2.resize(img_array[x], (0, 0), None, scale, scale)
+            else:
+                img_array[x] = cv2.resize(img_array[x], (img_array[0].shape[1], img_array[0].shape[0]), None, scale,
+                                          scale)
+            if len(img_array[x].shape) == 2:
+                img_array[x] = cv2.cvtColor(img_array[x], cv2.COLOR_GRAY2BGR)
+        hor = numpy.hstack(img_array)
+        ver = hor
+    return ver
+
+
+def get_contours(img_canny, img, draw_contours, draw=True, color=(0, 0, 0), thickness=2, min_area=500):
+    r"""
+
+    """
+    contours, hierarchy = cv2.findContours(img_canny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    object_corners = []
+    for cnt in contours:
+        area = cv2.contourArea(cnt)
+        if area > min_area:
+            cv2.drawContours(img, cnt, draw_contours, color, thickness)
+            peri = cv2.arcLength(cnt, True)
+            approx = cv2.approxPolyDP(cnt, 0.02 * peri, True)
+            obj_cor = len(approx)
+            object_corners.append(obj_cor)
+            x, y, w, h = cv2.boundingRect(approx)
+            if draw:
+                cv2.rectangle(img, (x, y), (x + w, y + h), (67, 255, 87), 1)
+
+    return object_corners, img
