@@ -36,7 +36,8 @@ Unreleased
     - Changed parameters from ``draw_background``.
     - Added ``ALL_CONTOURS`` constant.
     - Added finger constants for `HandTracker`.
-    _ Made some parameter changes to `RecButton` class.
+    - Made some parameter changes to `RecButton` class.
+    - Changed the color constants from RGB to BGR.
 
 - Additions utility functions/classes.
     - Added ``LiveColorDetector`` class.
