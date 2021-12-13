@@ -38,11 +38,14 @@ Unreleased
     - Added finger constants for `HandTracker`.
     - Made some parameter changes to `RecButton` class.
     - Changed the color constants from RGB to BGR.
+    - Changed function name ``set_capture_size`` to ``change_res``.
+    - Changed calculations for ``RecButton`` class
 
 - Additions utility functions/classes.
     - Added ``LiveColorDetector`` class.
     - Added ``img_stacker`` function.
     - Added ``get_contour`` function.
+    - Added ``rescale_frame`` function
 
 
 
