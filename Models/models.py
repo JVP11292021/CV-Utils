@@ -7,6 +7,7 @@ try:
     import face_recognition as fr
     import mediapipe as mp
     from PIL import ImageFont, ImageDraw, Image
+    import matplotlib.pyplot as plt
 except Exception:
     print("Something went wrong with the package dependencies. ")
 
@@ -316,13 +317,13 @@ class RecButton:
     This class is used to draw a button on the video loop of opencv. This class was created to make the drawing
     of buttons easier and more accessible to newer developers. This button creates a rectangular button.
     """
-    def __init__(self, text, pos1, pos2, fg=(255, 255, 255), bg=(0, 0, 0), text_thickness=1):
+    def __init__(self, text, pos, size=(85, 85), fg=(255, 255, 255), bg=(0, 0, 0), text_thickness=1):
         r"""
         In the constructor the values that are passed in are initialized.
 
         :param text: The text that will be put on the button
-        :param pos1: The top left position of the rectangle
-        :param pos2: The top right position of the rectangle
+        :param pos: The top left position of the rectangle
+        :param size: The top right position of the rectangle
         :param text_pos: The position of the text
         :param fg: The color of the text
         :param bg: The background color of the button
@@ -330,8 +331,8 @@ class RecButton:
         """
 
         self.text = text
-        self.pos1 = pos1
-        self.pos2 = pos2
+        self.pos = pos
+        self.size = size
         self.text_thickness = text_thickness
         self.fg = fg
         self.bg = bg
@@ -342,12 +343,12 @@ class RecButton:
         passed in correctly.
 
         The positions for the rectangle
-        pos1
+        pos
         x1,y1 ------
         |          |
         |          |
         |          |
-        --------x2,y2 pos2
+        --------x2,y2 size
 
         :param frame: Takes in the frame on which you want to draw the button
         :param c_x: Shift the text on the x-axis
@@ -355,11 +356,11 @@ class RecButton:
         :return: The frame with the button drawn on it
         """
 
-        x1, y1 = self.pos1
-        x2, y2 = self.pos2
+        x, y = self.pos
+        w, h = self.size
 
-        cv2.rectangle(frame, (x1, y1), (x2, y2), self.bg, cv2.FILLED)
-        cv2.putText(frame, self.text, (x1 + (x2 // 2) + c_x, y1 + (y2 // 2) + c_y), cv2.FONT_HERSHEY_PLAIN, 2, self.fg, self.text_thickness)
+        cv2.rectangle(frame, (x, y), (x + w, y + h), self.bg, cv2.FILLED)
+        cv2.putText(frame, self.text, (x + (w // 2) + c_x, y + (h // 2) + c_y), cv2.FONT_HERSHEY_PLAIN, 2, self.fg, self.text_thickness)
 
         return frame
 
@@ -376,11 +377,11 @@ class RecButton:
         :return: frame on which the new rectangle will be drawn on
         """
 
-        x1, y1 = self.pos1
-        x2, y2 = self.pos2
+        x, y = self.pos
+        w, h = self.size
 
-        cv2.rectangle(frame, (x1, y1), (x2, y2), bg_highlight, cv2.FILLED)
-        cv2.putText(frame, self.text, (x1 + (x2 // 2) + c_x, y1 + (y2 // 2) + c_y), cv2.FONT_HERSHEY_PLAIN, 2, fg_highlight, self.text_thickness)
+        cv2.rectangle(frame, (x, y), (x + w, y + h), bg_highlight, cv2.FILLED)
+        cv2.putText(frame, self.text, (x + (w // 2) + c_x, y + (h // 2) + c_y), cv2.FONT_HERSHEY_PLAIN, 2, fg_highlight, self.text_thickness)
 
         return frame
 
@@ -414,14 +415,6 @@ class CirButton:
     def draw(self, frame):
         r"""
         This function is used to draw the button on the frame.
-
-        The positions for the rectangle
-        pos1
-        x1,y1 ------
-        |          |
-        |          |
-        |          |
-        --------x2,y2 pos2
 
         :param frame: Takes in the frame on which you want to draw the button
         :return: The frame with the button drawn on it
@@ -715,7 +708,7 @@ def face_encodings(frame, face_locations):
     return fr.face_encodings(frame, face_locations)
 
 
-def set_capture_size(w, h, capture):
+def change_res(w, h, capture):
     r"""
     This function easily sets the width and height of the capture
 
@@ -804,8 +797,7 @@ def img_stacker(scale, img_array):
                 if img_array[x][y].shape[:2] == img_array[0][0].shape[:2]:
                     img_array[x][y] = cv2.resize(img_array[x][y], (0, 0), None, scale, scale)
                 else:
-                    img_array[x][y] = cv2.resize(img_array[x][y], (img_array[0][0].shape[1], img_array[0][0].shape[0]),
-                                                 None, scale, scale)
+                    img_array[x][y] = cv2.resize(img_array[x][y], (img_array[0][0].shape[1], img_array[0][0].shape[0]), None, scale, scale)
                 if len(img_array[x][y].shape) == 2:
                     img_array[x][y] = cv2.cvtColor(img_array[x][y], cv2.COLOR_GRAY2BGR)
         imageBlank = numpy.zeros((height, width, 3), numpy.uint8)
@@ -819,8 +811,7 @@ def img_stacker(scale, img_array):
             if img_array[x].shape[:2] == img_array[0].shape[:2]:
                 img_array[x] = cv2.resize(img_array[x], (0, 0), None, scale, scale)
             else:
-                img_array[x] = cv2.resize(img_array[x], (img_array[0].shape[1], img_array[0].shape[0]), None, scale,
-                                          scale)
+                img_array[x] = cv2.resize(img_array[x], (img_array[0].shape[1], img_array[0].shape[0]), None, scale, scale)
             if len(img_array[x].shape) == 2:
                 img_array[x] = cv2.cvtColor(img_array[x], cv2.COLOR_GRAY2BGR)
         hor = numpy.hstack(img_array)
@@ -828,11 +819,11 @@ def img_stacker(scale, img_array):
     return ver
 
 
-def get_contours(img_canny, img, draw_contours, draw=True, color=(0, 0, 0), thickness=2, min_area=500):
+def get_contours(img_canny, img, draw_contours, draw=True, color=(0, 0, 0), thickness=2, min_area=500, ct_mode=cv2.RETR_EXTERNAL):
     r"""
 
     """
-    contours, hierarchy = cv2.findContours(img_canny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    contours, hierarchy = cv2.findContours(img_canny, ct_mode, cv2.CHAIN_APPROX_NONE)
     object_corners = []
     for cnt in contours:
         area = cv2.contourArea(cnt)
@@ -847,3 +838,73 @@ def get_contours(img_canny, img, draw_contours, draw=True, color=(0, 0, 0), thic
                 cv2.rectangle(img, (x, y), (x + w, y + h), (67, 255, 87), 1)
 
     return object_corners, img
+
+
+def rescale_frame(scale, frame):
+    r"""
+
+    """
+    w, h, c = frame.shape
+    w, h = int(w * scale), int(h * scale)
+    dimensions = (w, h)
+
+    return cv2.resize(frame, dimensions, interpolation=cv2.INTER_AREA)
+
+
+def translate(img, x, y):
+    r"""
+
+    """
+    trans_mat = numpy.float32([[1, 0, x], [0, 1, y]])
+    dimension = (img.shape[1], img.shape[0])
+    return cv2.warpAffine(img, trans_mat, dimension)
+
+
+def rotate(img, angle, rotation_point=None, rot_scale=1.0):
+    r"""
+
+    """
+    width, height = img.shape[:2]
+    dimensions = (width, height)
+    if rotation_point is None:
+        rot_point = (width // 2, height // 2)
+    rot_mat = cv2.getRotationMatrix2D(rot_point, angle, rot_scale)
+    return cv2.warpAffine(img, rot_mat, dimensions)
+
+
+def img_hist_gray(img, img_title="Gray img", mask=None, range=[0, 256], num_bins=256, fig_name="Gray Histogram", plt_title="Histogram", plt_x_label="Bins", plt_y_label="# of pixels"):
+    r"""
+
+    """
+    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    cv2.imshow(img_title, gray_img)
+
+    gray_hist = cv2.calcHist([gray_img], [0], mask, [num_bins], range)
+
+    plt.figure(fig_name)
+    plt.title(plt_title)
+    plt.xlabel(plt_x_label)
+    plt.ylabel(plt_y_label)
+    plt.plot(gray_hist)
+    plt.xlim(range)
+    plt.show()
+
+
+def img_hist_bgr(img, img_title="BGR img", mask=None, range=[0, 256], num_bins=256, fig_name="BGR Histogram", plt_title="Histogram", plt_x_label="Bins", plt_y_label="# of pixels"):
+    r"""
+
+    """
+    cv2.imshow(img_title, img)
+
+    plt.figure(fig_name)
+    plt.title(plt_title)
+    plt.xlabel(plt_x_label)
+    plt.ylabel(plt_y_label)
+    colors = ('b', 'g', 'r')
+
+    for idx, col in enumerate(colors):
+        hist = cv2.calcHist([img], [idx], mask, [num_bins], range)
+        plt.plot(hist, color=col)
+        plt.xlim(range)
+
+    plt.show()
