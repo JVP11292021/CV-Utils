@@ -39,7 +39,7 @@ Unreleased
     - Made some parameter changes to `RecButton` class.
     - Changed the color constants from RGB to BGR.
     - Changed function name ``set_capture_size`` to ``change_res``.
-    - Changed calculations for width and height calcualtions for the ``RecButton().draw()`` class function.
+    - Changed calculations for width and height calculations for the ``RecButton().draw()`` class function.
 
 - Additions utility functions/classes.
     - Added ``LiveColorDetector`` class.
