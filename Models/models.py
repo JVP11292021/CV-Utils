@@ -32,6 +32,7 @@ class FaceRecognition:
         
         :arg
         :param dataset: string path to dataset
+        :param split_files:
         """
         self.dataset = dataset
         self.face_location = ()
@@ -752,6 +753,7 @@ def for_each_img(dir_path: str):
     :param dir_path: Takes in the path to the directory with the images in it
     :yield: This function returns a iterable object
     """
+
     if len(os.listdir(dir_path)) == 0:
         yield "The directory you've given is empty"
     else:
@@ -784,10 +786,11 @@ def img_stacker(scale, img_array):
     r"""
     This function is able to stack images vertically or horizontally.
 
-    :param scale:
-    :param img_array:
+    :param scale: The scale of the joint together images
+    :param img_array: Pass in a img array like ([img, img, img], [img, img, img]) or in a different form
     :return: The stacked images
     """
+
     rows = len(img_array)
     cols = len(img_array[0])
     rowsAvailable = isinstance(img_array[0], list)
@@ -823,8 +826,19 @@ def img_stacker(scale, img_array):
 
 def get_contours(img_canny, img, draw_contours, draw=True, color=(0, 0, 0), thickness=2, min_area=500, ct_mode=cv2.RETR_EXTERNAL):
     r"""
+    This function displays the contours of a image.
 
+    :param img_canny: cv.Canny img
+    :param img: The original img
+    :param draw_contours: The contours you want to draw
+    :param draw: If you want to draw on the img, true = draw
+    :param color: The color of the contours
+    :param thickness: The thickness of the drawn contours
+    :param min_area: The minimum area the contours cover
+    :param ct_mode: The getting contours mode
+    :return: The amount of corners the object has & the img where the contours have been drawn on
     """
+
     contours, hierarchy = cv2.findContours(img_canny, ct_mode, cv2.CHAIN_APPROX_NONE)
     object_corners = []
     for cnt in contours:
@@ -844,8 +858,12 @@ def get_contours(img_canny, img, draw_contours, draw=True, color=(0, 0, 0), thic
 
 def rescale_frame(scale, frame):
     r"""
+    This function can rescale an img/frame.
 
+    :param scale: The scale of the new frame
+    :param frame: The frame/img that you want to resize
     """
+
     w, h, c = frame.shape
     w, h = int(w * scale), int(h * scale)
     dimensions = (w, h)
@@ -855,8 +873,14 @@ def rescale_frame(scale, frame):
 
 def translate(img, x, y):
     r"""
+    This function translates (put img/frame in different position) img/frame.
 
+    :param img: The img/frame you want to translate
+    :param x: The new x coordinate
+    :param y: The new y coordinate
+    :return: The translated image
     """
+
     trans_mat = numpy.float32([[1, 0, x], [0, 1, y]])
     dimension = (img.shape[1], img.shape[0])
     return cv2.warpAffine(img, trans_mat, dimension)
@@ -864,8 +888,15 @@ def translate(img, x, y):
 
 def rotate(img, angle, rotation_point=None, rot_scale=1.0):
     r"""
+    This function rotates the img/frame.
 
+    :param img: The img you want to rotate
+    :param angle: The angle for the image rotation
+    :param rotation_point: The point of rotation
+    :param rot_scale: The scale of the rotation
+    :return: The rotated image
     """
+
     width, height = img.shape[:2]
     dimensions = (width, height)
     if rotation_point is None:
@@ -876,8 +907,19 @@ def rotate(img, angle, rotation_point=None, rot_scale=1.0):
 
 def img_hist_gray(img, img_title="Gray img", mask=None, range=[0, 256], num_bins=256, fig_name="Gray Histogram", plt_title="Histogram", plt_x_label="Bins", plt_y_label="# of pixels"):
     r"""
+    This function displays the img + a histogram for the grayscale values.
 
+    :param img: The img in which you want to display the grayscale histogram
+    :param img_title: The title of the img
+    :param mask: The mask of the img
+    :param range: The range of the bins on the histogram
+    :param num_bins: The number of bins on the x-axis
+    :param fig_name: The name of the matplotlib figure
+    :param plt_title: The title of the figure
+    :param plt_x_label: The label of the x-axis
+    :param plt_y_label: The label of the y-axis
     """
+
     gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     cv2.imshow(img_title, gray_img)
 
@@ -894,8 +936,20 @@ def img_hist_gray(img, img_title="Gray img", mask=None, range=[0, 256], num_bins
 
 def img_hist_bgr(img, img_title="BGR img", mask=None, range=[0, 256], num_bins=256, fig_name="BGR Histogram", plt_title="Histogram", plt_x_label="Bins", plt_y_label="# of pixels"):
     r"""
+    This function displays the img + a histogram for the BGR values.
 
+
+    :param img: The img in which you want to display the bgr histogram
+    :param img_title: The title of the img
+    :param mask: The mask of the img
+    :param range: The range of the bins on the histogram
+    :param num_bins: The number of bins on the x-axis
+    :param fig_name: The name of the matplotlib figure
+    :param plt_title: The title of the figure
+    :param plt_x_label: The label of the x-axis
+    :param plt_y_label: The label of the y-axis
     """
+
     cv2.imshow(img_title, img)
 
     plt.figure(fig_name)
@@ -910,3 +964,34 @@ def img_hist_bgr(img, img_title="BGR img", mask=None, range=[0, 256], num_bins=2
         plt.xlim(range)
 
     plt.show()
+
+
+def corner_rectangle(frame, bbox, color, cons=30, thickness=1, rectangle_thickness=1, line_type=None):
+    r"""
+    This function draws a corner rectangle on the screen.
+
+    :param frame: The frame on which you want to display the corner rectangle
+    :param bbox: The bbox of the rectangle (x, y, w, h)
+    :param color: The color of the rectangle
+    :param cons: The length off the different lines
+    :param thickness: The thickness of the lines
+    :param rectangle_thickness: The thickness of the rectangle, if rt = 0 then the rectangle isn't drawn
+    :param line_type: The type of the lines
+    """
+
+    x, y, w, h = bbox
+
+    if rectangle_thickness != 0:
+        cv2.rectangle(frame, bbox, color, rectangle_thickness)
+
+    cv2.line(frame, (x, y), (x + cons, y), color, thickness, lineType=line_type)
+    cv2.line(frame, (x, y), (x, y + cons), color, thickness, lineType=line_type)
+    cv2.line(frame, ((x + w), y), ((x + w) - cons, y), color, thickness, lineType=line_type)
+    cv2.line(frame, ((x + w), y), ((x + w), y + cons), color, thickness, lineType=line_type)
+    cv2.line(frame, (x, (y + h)), (x + cons, (y + h)), color, thickness, lineType=line_type)
+    cv2.line(frame, (x, (y + h)), (x, (y + h) - cons), color, thickness, lineType=line_type)
+    cv2.line(frame, ((x + w), (y + h)), ((x + w) - cons, (y + h)), color, thickness, lineType=line_type)
+    cv2.line(frame, ((x + w), (y + h)), ((x + w), (y + h) - cons), color, thickness, lineType=line_type)
+
+    return frame
+
