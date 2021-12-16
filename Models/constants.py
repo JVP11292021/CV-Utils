@@ -53,7 +53,7 @@ DIRTY_YELLOW = (93, 192, 175)
 
 STANDARD_WIN_SIZE = (750, 520)
 
-BLANK_FRAME = numpy.zeros((0), numpy.uint8)
+BLANK_FRAME = numpy.zeros(STANDARD_WIN_SIZE, numpy.uint8)
 
 ALL_CONTOURS = -1
 
