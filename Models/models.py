@@ -337,7 +337,7 @@ class RecButton:
         self.fg = fg
         self.bg = bg
 
-    def draw(self, frame, c_x=0, c_y=0):
+    def draw(self, frame, bg=(0, 0, 0), c_x=0, c_y=0):
         r"""
         This function is used to draw the button on the frame. The button is rectangular if the values are
         passed in correctly.
@@ -358,6 +358,7 @@ class RecButton:
 
         x, y = self.pos
         w, h = self.size
+        self.bg = bg
 
         cv2.rectangle(frame, (x, y), (x + w, y + h), self.bg, cv2.FILLED)
         cv2.putText(frame, self.text, (x + (w // 2) + c_x, y + (h // 2) + c_y), cv2.FONT_HERSHEY_PLAIN, 2, self.fg, self.text_thickness)
@@ -412,7 +413,7 @@ class CirButton:
         self.bg = bg
         self.fg = fg
 
-    def draw(self, frame):
+    def draw(self, frame, bg=(0, 0, 0)):
         r"""
         This function is used to draw the button on the frame.
 
@@ -421,6 +422,7 @@ class CirButton:
         """
         text_x, text_y = self.text_pos
         cx, cy = self.center_pos
+        self.bg = bg
 
         cv2.circle(frame, (cx, cy), self.r, self.bg, cv2.FILLED)
         cv2.putText(frame, self.text, (text_x, text_y), cv2.FONT_HERSHEY_PLAIN, 2, self.fg, self.thickness)
