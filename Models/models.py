@@ -313,6 +313,131 @@ class HandTracker:
             return True
 
 
+class MobNetObjectDetection:
+    def __init__(self, class_file, config_file, model_file, seed=543210):
+        r"""
+
+        """
+
+        with open(class_file) as fp:
+            self.labels = fp.read().split("\n")
+
+        numpy.random.seed(seed)
+        self.colors = numpy.random.uniform(0, 255, size=(len(self.labels), 3))
+
+        # Read the Tensorflow network
+        self.net = cv2.dnn.readNetFromTensorflow(model=model_file, config=config_file)
+
+    def __del__(self):
+        self.labels.clear()
+        self.net = None
+
+    def pre_process(self, img, scale_factor=0.007, mean=(0, 0, 0)):
+        r"""
+
+        """
+
+        dim = 300
+
+        # Create a blob from the image
+        blob = cv2.dnn.blobFromImage(cv2.resize(img, (300, 300)),
+                                     scalefactor=scale_factor,
+                                     size=(dim, dim), mean=mean,
+                                     swapRB=True, crop=False)
+
+        # Pass blob to the network
+        self.net.setInput(blob)
+
+        # Peform Prediction
+        detected_objects = self.net.forward()
+        return detected_objects
+
+    def display_cv_objects(self, img, detected_objects, min_confidence=0.25, draw=True, title="Object-detector"):
+        r"""
+
+        """
+
+        def draw_features(img, text, font=cv2.FONT_HERSHEY_PLAIN, font_scale=0.7, thickness=1):
+            cv2.rectangle(img,
+                          (upper_left_x, upper_left_y),
+                          (lower_right_x, lower_right_y),
+                          self.colors[class_index], thickness + 2)
+
+            cv2.putText(img, text, (upper_left_x, upper_left_y - 15 if upper_left_y > 30 else upper_left_y + 15),
+                        font, font_scale, self.colors[class_index], thickness)
+
+
+        width, height = img.shape[1], img.shape[0]
+
+        for i in range(detected_objects.shape[2]):
+            confidence = float(detected_objects[0][0][i][2])
+
+            if confidence > min_confidence:
+                class_index = int(detected_objects[0, 0, i, 1])
+
+                upper_left_x = int(detected_objects[0, 0, i, 3] * width)
+                upper_left_y = int(detected_objects[0, 0, i, 4] * height)
+                lower_right_x = int(detected_objects[0, 0, i, 5] * width)
+                lower_right_y = int(detected_objects[0, 0, i, 6] * height)
+
+                if draw:
+                    draw_features(img=img, text=f"{self.labels[class_index]}: {confidence:.2f}%")
+        if draw:
+            cv2.imshow(title, img)
+
+        return img
+
+    def display_plt_objects(self, img, objects, min_confidence=0.25, draw=True):
+        r"""
+
+        """
+
+        def draw_features(img, text, font=cv2.FONT_HERSHEY_PLAIN, font_scale=0.7, thickness=1):
+            cv2.rectangle(img, (upper_left_x, upper_left_y),
+                          (upper_left_x + lower_right_x, upper_left_y + lower_right_y),
+                          self.colors[class_index], thickness + 2)
+
+            cv2.putText(img, text, (upper_left_x, upper_left_y - 5), font,
+                        font_scale, self.colors[class_index], thickness, cv2.LINE_AA)
+
+        height = img.shape[0]
+        width = img.shape[1]
+
+        # For every Detected Object
+        for i in range(objects.shape[2]):
+            # Find the class and confidence
+            confidence = float(objects[0, 0, i, 2])
+
+            if confidence > min_confidence:
+                class_index = int(objects[0, 0, i, 1])
+
+                # Recover original cordinates from normalized coordinates
+                upper_left_x = int(objects[0, 0, i, 3] * width)
+                upper_left_y = int(objects[0, 0, i, 4] * height)
+                lower_right_x = int(objects[0, 0, i, 5] * width - upper_left_x)
+                lower_right_y = int(objects[0, 0, i, 6] * height - upper_left_y)
+
+                # Check if the detection is of good quality
+                if draw:
+                    draw_features(img, f"{self.labels[class_index]}: {confidence:.2f}%")
+
+        if draw:
+            # Convert Image to RGB since we are using Matplotlib for displaying image
+            mp_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            plt.figure(figsize=(30, 10))
+            plt.imshow(mp_img)
+            plt.show()
+
+        return img
+
+    def get_class_labels(self):
+        r"""
+
+        """
+
+        return self.labels
+
+
 class RecButton:
     r"""
     This class is used to draw a button on the video loop of opencv. This class was created to make the drawing
