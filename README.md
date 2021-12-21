@@ -139,3 +139,35 @@ This project was created for newer opencv-python developers. In this library the
     capture.release()
     cv.destroyAllWindows()
 `
+
+**Object detection**
+
+`
+
+    import cv2
+    import Models as mod
+    from Models import key_pressed
+    
+    
+    modelFile = "resources/MobileNet_detection_2018/frozen_inference_graph.pb"
+    configFile = "resources/MobileNet_detection_2018/ssd_mobilenet_v2_coco_2018_03_29.pbtxt"
+    classFile = "resources/MobileNet_detection_2018/coco_class_labels.txt"
+    
+    detector = mod.MobNetObjectDetection(classFile, configFile, modelFile)
+    path = "resources/MobileNet_detection_2018/test_data/videoplayback.mp4"
+    cap = cv2.VideoCapture(path)
+    
+    while True:
+        success, frame = cap.read()
+    
+        if success:
+            detected_objects = detector.pre_process(frame, scale_factor=0.78)
+    
+            detector.display_cv_objects(frame, detected_objects)
+    
+            if key_pressed('q'):
+                break
+    
+    cap.release()
+    cv2.destroyAllWindows()
+`
