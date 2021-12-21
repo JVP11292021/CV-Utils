@@ -6,8 +6,8 @@ First we need to make some imports. We import the custom package with Models.mod
 
 `
 
-    import Models.models as mod
-    from Models import close_win
+    import Models as mod
+    from Models import key_pressed
     import cv2 as cv
 
 `
@@ -33,7 +33,7 @@ Next we create the standard opencv frame loop. Firstly we save the frame and the
         
         cv.imshow("Test", frame)
 
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
@@ -53,7 +53,7 @@ Next we use the tracker.find_hands() function to find the hands in the current f
 
         cv.imshow("Test", frame)
     
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
@@ -77,7 +77,7 @@ Next we can use the landmarks variable to do some checks. With this landmark var
 
         cv.imshow("Test", frame)
     
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
@@ -108,7 +108,7 @@ After you've added all these steps the model should be working. Now we can add s
 
         cv.imshow("Test", frame)
     
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
@@ -124,8 +124,8 @@ Note you can use help(object) to view the descriptions within the console
 
 `
 
-    import Models.models as mod
-    from Models.models import face_locations, face_encodings, close_win
+    import Models as mod
+    from Models.models import key_pressed
     import cv2 as cv
 
     capture = cv.VideoCapture(0)
@@ -153,7 +153,7 @@ Note you can use help(object) to view the descriptions within the console
         cv.imshow("Handtracker", frame)
 
         # Using this function to close the loop. It returns cv.waitKey(1) & 0xFF == ord(key)
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
