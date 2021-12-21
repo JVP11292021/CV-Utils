@@ -7,8 +7,8 @@ This project was created for newer opencv-python developers. In this library the
 **Face recognition**
 `
     
-    import Models.models as mod
-    from Models.models import face_locations, face_encodings, close_win
+    import Models as mod
+    from Models.models import face_locations, face_encodings, key_pressed
     import cv2 as cv
     import traceback
 
@@ -50,7 +50,7 @@ This project was created for newer opencv-python developers. In this library the
         cv.waitKey(1)
         
         # Using this function to close the loop. It returns cv.waitKey(1) & 0xFF == ord(key)
-        if close_win("q"):
+        if key_pressed("q"):
             break
 
     capture.release()
@@ -60,8 +60,8 @@ This project was created for newer opencv-python developers. In this library the
 **Face detection**
 `
     
-    import Models.models as mod
-    from Models.models import face_locations, face_encodings, close_win
+    import Models as mod
+    from Models.models import face_locations, face_encodings, key_pressed
     import cv2 as cv
     import traceback
 
@@ -93,7 +93,7 @@ This project was created for newer opencv-python developers. In this library the
         cv.imshow("Face detection", frame)
         
         # Using this function to close the loop. It returns cv.waitKey(1) & 0xFF == ord(key)
-        if close_win("q"):
+        if key_pressed("q"):
             break
 
     capture.release()
@@ -103,8 +103,8 @@ This project was created for newer opencv-python developers. In this library the
 **Hand tracking**
 `
     
-    import Models.models as mod
-    from Models.models import face_locations, face_encodings, close_win
+    import Models as mod
+    from Models.models import key_pressed
     import cv2 as cv
 
     capture = cv.VideoCapture(0)
@@ -133,7 +133,7 @@ This project was created for newer opencv-python developers. In this library the
         cv.imshow("Handtracker", frame)
 
         # Using this function to close the loop. It returns cv.waitKey(1) & 0xFF == ord(key)
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
