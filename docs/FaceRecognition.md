@@ -6,8 +6,8 @@ First we need to make some imports. We import the custom package with Models.mod
 
 `
 
-    import Models.models as mod
-    from Models import face_locations, face_encodings, close_win
+    import Models as mod
+    from Models import face_locations, face_encodings, key_pressed
     import cv2 as cv
     import traceback
 
@@ -44,7 +44,7 @@ Next we create the standard opencv frame loop. Firstly we save the frame and the
         
         cv.imshow("Test", frame)
 
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
@@ -64,7 +64,7 @@ Next we need to resize the frame to 4x less. We do this with cv.resize(fx=0.25, 
 
         cv.imshow("Test", frame)
     
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
@@ -87,7 +87,7 @@ Next we add the current face encoding and the face locations functions. The face
 
         cv.imshow("Test", frame)
     
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
@@ -116,7 +116,7 @@ Next we add the find_faces function from the FaceRecognition class. This functio
 
         cv.imshow("Test", frame)
     
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
@@ -146,7 +146,7 @@ After you've added all these steps the model should be working. Now we can add s
 
         cv.imshow("Test", frame)
     
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
@@ -161,8 +161,8 @@ Note you can use help(object) to view the descriptions within the console
 
 `
 
-    import Models.models as mod
-    from Models import face_locations, face_encodings, close_win
+    import Models as mod
+    from Models import face_locations, face_encodings, key_pressed
     import cv2 as cv
     import traceback
 
@@ -204,7 +204,7 @@ Note you can use help(object) to view the descriptions within the console
         cv.waitKey(1)
         
         # Using this function to close the loop. It returns cv.waitKey(1) & 0xFF == ord(key)
-        if close_win("q"):
+        if key_pressed("q"):
             break
 
     capture.release()
