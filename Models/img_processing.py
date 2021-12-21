@@ -31,7 +31,7 @@ def rescale(scale, frame):
     :param frame: The frame/img that you want to resize
     """
 
-    w, h, c = frame.shape
+    w, h, _ = frame.shape
     w, h = int(w * scale), int(h * scale)
     dimensions = (w, h)
 

@@ -513,9 +513,26 @@ class RecButton:
         return frame
 
     @staticmethod
-    def command(condition, command):
-        if condition:
-            command()
+    def command(command, *args, new_condition=True):
+        r"""
+        This function performs a command (function). You can pass the parameters into *args tuple.
+
+        :param command: The function you want to execute
+        :param *args: The parameters of the function if the function has any
+        :param new_condition: an extra condition if you want.
+        :return: The command()
+        """
+
+        def unpack_params(args):
+            for i in args:
+                params = i
+            return params
+
+        if new_condition:
+            if args == ():
+                return command()
+            else:
+                return command(*unpack_params(args))
         else:
             return None
 
@@ -582,9 +599,26 @@ class CirButton:
         return frame
 
     @staticmethod
-    def command(condition, command):
-        if condition:
-            command()
+    def command(command, *args, new_condition=True):
+        r"""
+        This function performs a command (function). You can pass the parameters into *args tuple.
+
+        :param command: The function you want to execute
+        :param *args: The parameters of the function if the function has any
+        :param new_condition: an extra condition if you want.
+        :return: The command()
+        """
+
+        def unpack_params(args):
+            for i in args:
+                params = i
+            return params
+
+        if new_condition:
+            if args == ():
+                return command()
+            else:
+                return command(*unpack_params(args))
         else:
             return None
 
@@ -819,7 +853,7 @@ def draw_background(frame_shape, color=(255, 255, 255)):
     return frame
 
 
-def close_win(key):
+def key_pressed(key):
     r"""
     This function returns some hexadecimal logic to break out of a unlimited loop.
 
