@@ -26,7 +26,7 @@ setup(
     license=LICENSE,
     url=URL,
     classifiers=[
-        "Development status :: 0.0.1 - Alpha",
+        "Development status :: 0.0.2 - Alpha",
         "Intended audience :: Developers",
         "Operating system :: MacOS :: MacOS X",
         "Operating system :: microsoft :: Windows",
@@ -44,6 +44,7 @@ setup(
         "cmake",
         "face_recognition",
         "mediapipe",
-        "pillow"
+        "pillow",
+        "numba"
     ],
 )
