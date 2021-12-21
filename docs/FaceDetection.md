@@ -6,8 +6,8 @@ First we need to make some imports. We import the custom package with Models.mod
 
 `
 
-    import Models.models as mod
-    from Models import close_win, face_locations, face_encodings
+    import Models as mod
+    from Models import key_pressed, face_locations, face_encodings
     import cv2 as cv
 
 `
@@ -33,7 +33,7 @@ Next we create the standard opencv frame loop. Firstly we save the frame and the
         
         cv.imshow("Test", frame)
 
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
@@ -55,7 +55,7 @@ Next we convert the color channels of the frame from BGR to RGB. We also get the
 
         cv.imshow("Test", frame)
 
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
@@ -82,7 +82,7 @@ Next we use the detector.detect_faces() function to find the faces within the cu
 
         cv.imshow("Test", frame)
 
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
@@ -113,7 +113,7 @@ After you've added all these steps the model should be working. Now we can add s
 
         cv.imshow("Test", frame)
     
-        if close_win('q'):
+        if key_pressed('q'):
             break
 
     capture.release()
@@ -129,8 +129,8 @@ Note you can use help(object) to view the descriptions within the console
 
 `
     
-    import Models.models as mod
-    from Models.models import face_locations, face_encodings, close_win
+    import Models as mod
+    from Models.models import face_locations, face_encodings, key_pressed
     import cv2 as cv
 
     capture = cv.VideoCapture(0)
@@ -161,7 +161,7 @@ Note you can use help(object) to view the descriptions within the console
         cv.imshow("Face detection", frame)
         
         # Using this function to close the loop. It returns cv.waitKey(1) & 0xFF == ord(key)
-        if close_win("q"):
+        if key_pressed("q"):
             break
 
     capture.release()
