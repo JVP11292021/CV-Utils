@@ -6,7 +6,7 @@ import cv2 as cv
 
 class TestFunc(unittest.TestCase):
     def test_close_win(self):
-        self.assertEqual(Models.close_win('q'), False)
+        self.assertEqual(Models.key_pressed('q'), False)
 
 class TestFPS(unittest.TestCase):
     fps = Models.FPS()
