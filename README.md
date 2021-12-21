@@ -141,7 +141,6 @@ This project was created for newer opencv-python developers. In this library the
 `
 
 **Object detection**
-
 `
 
     import cv2
