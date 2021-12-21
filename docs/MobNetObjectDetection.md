@@ -6,6 +6,7 @@
 
     import cv2
     import Models as mod
+    from Models import key_pressed
     
     
     modelFile = "resources/MobileNet_detection_2018/frozen_inference_graph.pb"
@@ -24,7 +25,7 @@
     
             detector.display_cv_objects(frame, detected_objects)
     
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            if key_pressed('q'):
                 break
     
     cap.release()
@@ -35,7 +36,7 @@
 
 `
 
-    import Models.models as mod
+    import Models as mod
     import cv2 as cv
     
     modelFile = "resources/MobileNet_detection_2018/frozen_inference_graph.pb"
@@ -56,7 +57,7 @@
 
 `
 
-    import Models.models as mod
+    import Models as mod
     import cv2 as cv
     
     modelFile = "resources/MobileNet_detection_2018/frozen_inference_graph.pb"
