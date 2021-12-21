@@ -2,3 +2,4 @@
 __pycache__
 test_main.py
 resources/other
+resources/face_rec_model_data
