@@ -48,6 +48,10 @@ Unreleased
     - Added ``rescale_frame`` function.
     - Added ``img_hist_gray`` function.
     - Added ``img_hist_bgr`` function.
-
+    - Added mobilenet ``ObjectDetection`` class.
+    - Added ``set_brightness`` function.
+    - Added command features to the ``Recbutton & CirButton`` classes. Now the can call functions with the ``.command(condition, command)`` function.
+    - Created new ``img_processing.py`` file.
+    - Added ``process`` function.
 
 
