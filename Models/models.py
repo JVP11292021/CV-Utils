@@ -512,6 +512,13 @@ class RecButton:
 
         return frame
 
+    @staticmethod
+    def command(condition, command):
+        if condition:
+            command()
+        else:
+            return None
+
 
 class CirButton:
     r"""
@@ -573,6 +580,13 @@ class CirButton:
         cv2.putText(frame, self.text, (text_x, text_y), cv2.FONT_HERSHEY_PLAIN, 2, fg_highlight, self.thickness)
 
         return frame
+
+    @staticmethod
+    def command(condition, command):
+        if condition:
+            command()
+        else:
+            return None
 
 
 class LiveColorDetector:
@@ -979,55 +993,6 @@ def get_contours(img_canny, img, draw_contours, draw=True, color=(0, 0, 0), thic
                 cv2.rectangle(img, (x, y), (x + w, y + h), (67, 255, 87), 1)
 
     return object_corners, img
-
-
-def rescale_frame(scale, frame):
-    r"""
-    This function can rescale an img/frame.
-
-    :param scale: The scale of the new frame
-    :param frame: The frame/img that you want to resize
-    """
-
-    w, h, c = frame.shape
-    w, h = int(w * scale), int(h * scale)
-    dimensions = (w, h)
-
-    return cv2.resize(frame, dimensions, interpolation=cv2.INTER_AREA)
-
-
-def translate(img, x, y):
-    r"""
-    This function translates (put img/frame in different position) img/frame.
-
-    :param img: The img/frame you want to translate
-    :param x: The new x coordinate
-    :param y: The new y coordinate
-    :return: The translated image
-    """
-
-    trans_mat = numpy.float32([[1, 0, x], [0, 1, y]])
-    dimension = (img.shape[1], img.shape[0])
-    return cv2.warpAffine(img, trans_mat, dimension)
-
-
-def rotate(img, angle, rotation_point=None, rot_scale=1.0):
-    r"""
-    This function rotates the img/frame.
-
-    :param img: The img you want to rotate
-    :param angle: The angle for the image rotation
-    :param rotation_point: The point of rotation
-    :param rot_scale: The scale of the rotation
-    :return: The rotated image
-    """
-
-    width, height = img.shape[:2]
-    dimensions = (width, height)
-    if rotation_point is None:
-        rot_point = (width // 2, height // 2)
-    rot_mat = cv2.getRotationMatrix2D(rot_point, angle, rot_scale)
-    return cv2.warpAffine(img, rot_mat, dimensions)
 
 
 def img_hist_gray(img, img_title="Gray img", mask=None, range=[0, 256], num_bins=256, fig_name="Gray Histogram", plt_title="Histogram", plt_x_label="Bins", plt_y_label="# of pixels"):
