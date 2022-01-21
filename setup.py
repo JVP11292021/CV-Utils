@@ -35,6 +35,7 @@ setup(
         "Programming language :: Python :: 3.7",
         "Programming language :: Python :: 3.8",
         "Programming language :: Python :: 3.9",
+        "Programming language :: Python :: 3.10",
     ],
     keyword=KEYWORDS,
     packages=find_packages(exclude=["docs", "tests*", "contrib"]),
